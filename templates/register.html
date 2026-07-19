@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Daftar — SAMBAL.AI{% endblock %}
+{% block content %}
+
+<section class="auth-wrap">
+    <div class="auth-card">
+        <span class="eyebrow">Daftar</span>
+        <h1>Buat Akun Baru</h1>
+        <p class="lead">Gratis, cuma butuh username, email, dan password.</p>
+
+        <form method="POST" class="auth-form">
+            <label>Username</label>
+            <input type="text" name="username" required autofocus>
+
+            <label>Email</label>
+            <input type="email" name="email" required>
+
+            <label>Password</label>
+            <input type="password" name="password" required minlength="6">
+            <span class="field-hint">Minimal 6 karakter</span>
+
+            <button type="submit" class="btn-cta full">Daftar</button>
+        </form>
+
+        <p class="auth-switch">Sudah punya akun? <a href="{{ url_for('login') }}">Login di sini</a></p>
+    </div>
+</section>
+
+{% endblock %}

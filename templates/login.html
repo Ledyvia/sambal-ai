@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Login — SAMBAL.AI{% endblock %}
+{% block content %}
+
+<section class="auth-wrap">
+    <div class="auth-card">
+        <span class="eyebrow">Masuk</span>
+        <h1>Selamat Datang Kembali</h1>
+        <p class="lead">Login buat pakai fitur chat AI dan simpan resep favorit kamu.</p>
+
+        <form method="POST" class="auth-form">
+            <label>Username atau Email</label>
+            <input type="text" name="username" required autofocus>
+
+            <label>Password</label>
+            <input type="password" name="password" required>
+
+            <button type="submit" class="btn-cta full">Login</button>
+        </form>
+
+        <p class="auth-switch">Belum punya akun? <a href="{{ url_for('register') }}">Daftar di sini</a></p>
+    </div>
+</section>
+
+{% endblock %}

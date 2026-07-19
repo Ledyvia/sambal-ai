@@ -1,0 +1,33 @@
+// Icon set SAMBAL.AI — versi JS dari templates/_icons.html, paths-nya sama persis
+// biar konsisten. Dipakai di semua static/js/*.js yang nge-render HTML dinamis.
+const ICON_PATHS = {
+    "bowl": '<path d="M4 9c0 4.7 3.6 8.5 8 8.5s8-3.8 8-8.5"/><ellipse cx="12" cy="9" rx="8" ry="2"/><path d="M9.5 20.3h5"/><circle cx="9.3" cy="12.3" r=".65" fill="currentColor" stroke="none"/><circle cx="12.6" cy="13.8" r=".65" fill="currentColor" stroke="none"/><circle cx="15" cy="11.8" r=".65" fill="currentColor" stroke="none"/><path d="M8.3 4.3c0-1-.8-1-.8-2s.8-1 .8-2"/><path d="M12 4.3c0-1 .8-1 .8-2s-.8-1-.8-2"/><path d="M15.7 4.3c0-1-.8-1-.8-2s.8-1 .8-2"/>',
+    "close": '<path d="M6 6l12 12M18 6L6 18"/>',
+    "history": '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/>',
+    "message": '<path d="M21 11.5a8.4 8.4 0 0 1-8.4 8.4 8.3 8.3 0 0 1-3.8-.9L3 21l1.9-5.7a8.3 8.3 0 0 1-.9-3.8A8.4 8.4 0 0 1 12.6 3h.4a8 8 0 0 1 8 8v.5Z"/>',
+    "book": '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>',
+    "calendar": '<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M16 3v4M8 3v4M3 10h18"/>',
+    "sparkles": '<path d="M11 3l1.2 4.3L16.5 8.5l-4.3 1.2L11 14l-1.2-4.3L5.5 8.5l4.3-1.2L11 3Z"/><path d="M18 13l.7 2.4 2.4.7-2.4.7-.7 2.4-.7-2.4-2.4-.7 2.4-.7.7-2.4Z"/>',
+    "lock": '<rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/><circle cx="12" cy="15.2" r="1.3" fill="currentColor" stroke="none"/>',
+    "search": '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/>',
+    "check": '<path d="M4 12.5l5 5L20 6.5"/>',
+    "arrow-right": '<path d="M4 12h15M13 6l6 6-6 6"/>',
+    "arrow-left": '<path d="M20 12H5M11 6l-6 6 6 6"/>',
+    "heart": '<path d="M12 20.5s-7.5-4.6-9.8-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.8 5.5c-2.3 4.4-9.8 9-9.8 9Z"/>',
+    "heart-filled": '<path d="M12 20.5s-7.5-4.6-9.8-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.8 5.5c-2.3 4.4-9.8 9-9.8 9Z" fill="currentColor" stroke="none"/>',
+    "play": '<path d="M7 4.5v15l13-7.5-13-7.5Z" fill="currentColor" stroke="none"/>',
+    "clock": '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3.2 2"/>',
+    "download": '<path d="M12 3.5v11.5M7.5 11l4.5 4.5L16.5 11"/><path d="M4.5 19.5h15"/>',
+    "map-pin": '<path d="M12 21.5s7-6.5 7-12A7 7 0 0 0 5 9.5c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9.5" r="2.4"/>',
+    "robot": '<rect x="4.5" y="8" width="15" height="11" rx="3"/><path d="M12 8V4.5"/><circle cx="12" cy="3" r="1.1" fill="currentColor" stroke="none"/><circle cx="9" cy="13" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.3" fill="currentColor" stroke="none"/><path d="M9 16.5h6"/>',
+    "trash": '<path d="M5 7h14M10 3.5h4a1 1 0 0 1 1 1V7H9V4.5a1 1 0 0 1 1-1Z"/><path d="M7 7l1 13a1.5 1.5 0 0 0 1.5 1.4h5A1.5 1.5 0 0 0 16 20l1-13"/><path d="M10 11v6M14 11v6"/>',
+    "warning": '<path d="M12 3.5 22 20.5H2L12 3.5Z"/><path d="M12 10v4.2"/><circle cx="12" cy="17.2" r="1" fill="currentColor" stroke="none"/>',
+    "thumbs-up": '<path d="M8 21V10.5l4.6-6.6a1.6 1.6 0 0 1 2.9 1.2L14.5 9H19a2 2 0 0 1 2 2.3l-1.4 8A2 2 0 0 1 17.6 21H8Z"/><path d="M8 21H5.5A1.5 1.5 0 0 1 4 19.5v-8A1.5 1.5 0 0 1 5.5 10H8"/>',
+    "thumbs-down": '<path d="M16 3v10.5L11.4 20a1.6 1.6 0 0 1-2.9-1.2L9.5 15H5a2 2 0 0 1-2-2.3l1.4-8A2 2 0 0 1 6.4 3H16Z"/><path d="M16 3h2.5A1.5 1.5 0 0 1 20 4.5v8a1.5 1.5 0 0 1-1.5 1.5H16"/>',
+    "receipt": '<path d="M6 2.5h12v19l-2.2-1.5-2 1.5-1.8-1.5-2 1.5-1.8-1.5-2.2 1.5v-19Z"/><path d="M8.5 7.5h7M8.5 11h7M8.5 14.5h4.5"/>',
+};
+
+function icon(name, size = 18, cls = "") {
+    const path = ICON_PATHS[name] || "";
+    return `<svg class="icon ${cls}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
+}

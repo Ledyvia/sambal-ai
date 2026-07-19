@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% import '_icons.html' as icons %}
+{% block title %}Favorit Saya — SAMBAL.AI{% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <span class="eyebrow">{{ recipes|length }} Resep Disimpan</span>
+    <h1>Favorit Saya</h1>
+    <p class="lead">Resep-resep yang kamu simpan buat dimasak nanti.</p>
+</section>
+
+<section class="recipe-section">
+    <div class="recipe-grid">
+        {% for r in recipes %}
+        <a href="/resep/{{ r.id }}" class="recipe-card">
+            <span class="cat-tag">{{ r.category }}</span>
+            <h3>{{ r.title }}</h3>
+            <div class="meta">
+                <span>{{ r.total_ingredients }} bahan</span>
+                <span>{{ icons.icon('heart-filled', 14) }} {{ r.loves }}</span>
+            </div>
+        </a>
+        {% else %}
+        <p style="grid-column: 1/-1; color: rgba(59,36,23,0.55);">
+            Belum ada resep favorit. Klik ikon hati di halaman detail resep buat nyimpen.
+        </p>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% import '_icons.html' as icons %}
+{% block title %}Rencana Menu Mingguan — SAMBAL.AI{% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <span class="eyebrow">Meal Planner</span>
+    <h1>Rencana Menu Mingguan</h1>
+    <p class="lead">Susun menu Sarapan, Makan Siang, dan Makan Malam buat seminggu penuh. Klik slot kosong buat pilih resep dari database.</p>
+</section>
+
+<section class="mpai-panel">
+    <h2>{{ icons.icon('robot', 22) }} Meal Planner AI</h2>
+    <p class="mpai-sub">
+        Ceritain bahan yang udah kamu punya di rumah, AI bakal susunin menu seminggu yang
+        bervariasi (dari dataset resep utama) sekaligus daftar belanja bahan yang masih
+        kurang — lengkap sama perkiraan jumlah/beratnya — jadi gak ada bahan yang mubazir
+        kebeli percuma.
+    </p>
+
+    <div class="mpai-form">
+        <div class="mpai-field">
+            <label for="mpai-hari">Jumlah hari</label>
+            <input type="number" id="mpai-hari" min="1" max="7" value="{{ ai_settings.jumlah_hari }}">
+        </div>
+        <div class="mpai-field">
+            <label for="mpai-orang">Jumlah orang</label>
+            <input type="number" id="mpai-orang" min="1" max="20" value="{{ ai_settings.jumlah_orang }}">
+        </div>
+        <div class="mpai-field">
+            <label for="mpai-wilayah">Wilayah (buat estimasi harga)</label>
+            <select id="mpai-wilayah">
+                <option value="jawa" {{ "selected" if ai_settings.wilayah != "luar_jawa" else "" }}>Jawa</option>
+                <option value="luar_jawa" {{ "selected" if ai_settings.wilayah == "luar_jawa" else "" }}>Luar Jawa</option>
+            </select>
+        </div>
+    </div>
+    <p class="mpai-hint">Bisa juga langsung sebutin di chat, misal "buatin buat 5 hari untuk 3 orang" — itu akan dipakai duluan daripada angka di atas. Wilayah cuma dipakai buat pengali kasar estimasi harga (bukan lokasi presisi).</p>
+
+    <div id="mpai-messages" class="mpai-chatbox">
+        <div class="chat-msg bot">Halo! Ceritain bahan yang udah kamu punya di rumah (atau langsung klik "Buat Rencana Menu" kalau mau AI pilihin dari nol).</div>
+        {% if ai_last_reply %}
+        <div class="chat-msg bot">{{ ai_last_reply | linkify }}</div>
+        {% endif %}
+    </div>
+
+    <div class="mpai-form-row">
+        <input type="text" id="mpai-input" placeholder="Misal: aku punya telur, kecap, sama ayam..." autocomplete="off">
+        <button id="mpai-generate" class="mpai-btn">Buat Rencana Menu</button>
+        <button id="mpai-clear" class="mpai-btn" style="background:transparent; color:var(--cabai); border:1px solid var(--cabai);" title="Hapus chat & rencana menu yang tersimpan">{{ icons.icon('trash', 16) }} Bersihin Chat</button>
+    </div>
+
+    {% if ai_has_content %}
+    <div class="planner-section" id="ai-plan-section" style="margin-top:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+            <p class="mpai-sub" style="margin:0;"><strong>Rencana minggu ini (hasil AI):</strong></p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="{{ url_for('export_menu_table_pdf') }}" class="mpai-btn" style="text-decoration:none; padding:8px 16px; font-size:0.85rem;">{{ icons.icon('download', 15) }} Download Menu</a>
+                <a href="{{ url_for('export_meal_plan_pdf') }}" class="mpai-btn" style="text-decoration:none; padding:8px 16px; font-size:0.85rem;">{{ icons.icon('download', 15) }} Download Resep</a>
+            </div>
+        </div>
+        <div class="planner-grid" id="ai-plan-grid">
+            <div class="planner-corner"></div>
+            {% for day in days %}<div class="planner-day-label">{{ day }}</div>{% endfor %}
+            {% for meal in meal_types %}
+            <div class="planner-meal-label">{{ meal }}</div>
+            {% for day in days %}
+                {% set slot = ai_plan[day][meal] %}
+                <div class="planner-cell">
+                    {% if slot %}
+                    <div class="planner-filled">
+                        <span class="cat-tag">{{ slot.category }}</span>
+                        <a href="/resep/{{ slot.recipe_id }}">{{ slot.title }}</a>
+                    </div>
+                    {% else %}
+                    <span style="opacity:.4; font-size:.8rem;">—</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="planner-section" id="ai-plan-section" style="margin-top:20px; display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+            <p class="mpai-sub" style="margin:0;"><strong>Rencana minggu ini (hasil AI):</strong></p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="{{ url_for('export_menu_table_pdf') }}" class="mpai-btn" style="text-decoration:none; padding:8px 16px; font-size:0.85rem;">{{ icons.icon('download', 15) }} Download Menu</a>
+                <a href="{{ url_for('export_meal_plan_pdf') }}" class="mpai-btn" style="text-decoration:none; padding:8px 16px; font-size:0.85rem;">{{ icons.icon('download', 15) }} Download Resep</a>
+            </div>
+        </div>
+        <div class="planner-grid" id="ai-plan-grid"></div>
+    </div>
+    {% endif %}
+
+    {% if ai_shopping_list %}
+    <div class="planner-section" id="ai-shopping-section" style="margin-top:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+            <p class="mpai-sub" style="margin:0;"><strong>Daftar Belanja Minggu Ini:</strong></p>
+            <button type="button" id="lihat-belanja-btn" class="mpai-btn" style="padding:8px 16px; font-size:0.85rem;">{{ icons.icon('receipt', 15) }} Lihat List Belanjaan</button>
+        </div>
+        <div id="ai-shopping-body">
+            {% if ai_shopping_list.shopping_list %}
+            <p class="mpai-hint" style="margin:0;">Klik tombol di atas buat lihat rincian bahan, jumlah, harga, sama link belanjanya.</p>
+            {% else %}
+            <p>Semua bahan yang dibutuhkan minggu ini udah kamu punya. Gak perlu belanja!</p>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <div class="planner-section" id="ai-shopping-section" style="margin-top:20px; display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+            <p class="mpai-sub" style="margin:0;"><strong>Daftar Belanja Minggu Ini:</strong></p>
+            <button type="button" id="lihat-belanja-btn" class="mpai-btn" style="padding:8px 16px; font-size:0.85rem;">{{ icons.icon('receipt', 15) }} Lihat List Belanjaan</button>
+        </div>
+        <div id="ai-shopping-body"></div>
+    </div>
+    {% endif %}
+
+    {# Kertas/struk belanja — muncul sebagai modal pas "Lihat List Belanjaan" dipencet.
+       Isinya nama bahan, jumlah, harga, & tombol Cari/Peta per item (gak ada
+       info "dipakai di X resep" lagi). #}
+    <div class="receipt-overlay" id="shopping-receipt-overlay">
+        <div class="receipt-modal">
+            <div class="receipt-header">
+                <span>{{ icons.icon('receipt', 18) }} Daftar Belanja</span>
+                <button type="button" id="receipt-close" title="Tutup">{{ icons.icon('close', 18) }}</button>
+            </div>
+            <div class="receipt-body" id="receipt-body">
+                {% if ai_shopping_list %}
+                {% if ai_shopping_list.catatan_porsi %}
+                <p class="mpai-hint" style="margin-bottom:10px;">{{ ai_shopping_list.catatan_porsi }}</p>
+                {% endif %}
+                {% if ai_shopping_list.shopping_list %}
+                {% if ai_shopping_list.total_harga_estimasi %}
+                <div class="receipt-total">
+                    <strong style="font-size:1.05rem;">Perkiraan total belanja: ~Rp{{ "{:,.0f}".format(ai_shopping_list.total_harga_estimasi | default(0, true)).replace(",", ".") }}</strong>
+                    <p class="mpai-hint" style="margin:6px 0 0;">{{ ai_shopping_list.harga_disclaimer }}</p>
+                </div>
+                {% endif %}
+                <div class="receipt-items">
+                    {% for item in ai_shopping_list.shopping_list %}
+                    <div class="receipt-item-row">
+                        <div class="receipt-item-top">
+                            <span class="receipt-item-name">{{ item.bahan }}</span>
+                            <span class="receipt-item-price">~Rp{{ "{:,.0f}".format(item.harga_estimasi | default(0, true)).replace(",", ".") }}{% if item.harga_kasar %}<span title="Bahan ini gak ada di tabel referensi harga, jadi pakai harga generik">*</span>{% endif %}</span>
+                        </div>
+                        <div class="receipt-item-bottom">
+                            <span class="receipt-item-qty">{{ item.jumlah | default("cek pas belanja", true) }}</span>
+                            <span class="receipt-item-actions">
+                                <a href="{{ item.marketplace_url }}" target="_blank" rel="noopener" class="receipt-link-btn cari">Cari</a>
+                                {% if item.maps_url %}<a href="{{ item.maps_url }}" target="_blank" rel="noopener" class="receipt-link-btn peta">{{ icons.icon('map-pin', 12) }} Peta</a>{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>Semua bahan yang dibutuhkan minggu ini udah kamu punya. Gak perlu belanja!</p>
+                {% endif %}
+                {% endif %}
+            </div>
+            <div class="receipt-footer">
+                <a href="{{ url_for('export_shopping_list_pdf') }}" class="mpai-btn">{{ icons.icon('download', 15) }} Download List Menu</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const MPAI_DAYS = {{ days | tojson }};
+    const MPAI_MEAL_TYPES = {{ meal_types | tojson }};
+</script>
+
+<section class="planner-section">
+    <div class="planner-grid">
+        <div class="planner-corner"></div>
+        {% for day in days %}
+        <div class="planner-day-label">{{ day }}</div>
+        {% endfor %}
+
+        {% for meal in meal_types %}
+        <div class="planner-meal-label">{{ meal }}</div>
+        {% for day in days %}
+            {% set slot = plan[day][meal] %}
+            <div class="planner-cell" data-day="{{ day }}" data-meal="{{ meal }}">
+                {% if slot %}
+                <div class="planner-filled">
+                    <span class="cat-tag">{{ slot.category }}</span>
+                    <a href="/resep/{{ slot.recipe_id }}">{{ slot.title }}</a>
+                    <button class="planner-remove" title="Hapus">{{ icons.icon('close', 14) }}</button>
+                </div>
+                {% else %}
+                <button class="planner-add">+ Tambah</button>
+                {% endif %}
+            </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Modal pilih resep -->
+<div id="recipe-picker" class="picker-overlay">
+    <div class="picker-modal">
+        <div class="picker-header">
+            <span>Pilih Resep</span>
+            <button id="picker-close">{{ icons.icon('close', 16) }}</button>
+        </div>
+        <input id="picker-search" type="text" placeholder="Cari nama resep..." autocomplete="off">
+        <div id="picker-results" class="picker-results"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/meal-planner.js') }}"></script>
+<script src="{{ url_for('static', filename='js/meal-planner-ai.js') }}"></script>
+{% endblock %}

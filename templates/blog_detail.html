@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — SAMBAL.AI{% endblock %}
+{% import '_icons.html' as icons %}
+{% block content %}
+
+<div class="detail-wrap">
+    <a href="{{ url_for('blog') }}" class="back-link">{{ icons.icon('arrow-left', 15) }} Kembali ke Blog</a>
+    <div style="margin-top: 20px;">
+        <span class="cat-tag">{{ post.category }}</span>
+        <h1>{{ post.title }}</h1>
+    </div>
+
+    <div class="detail-block">
+        <div class="content">{{ post.content }}</div>
+    </div>
+</div>
+
+{% endblock %}

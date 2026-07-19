@@ -1,0 +1,26 @@
+# Environment & secrets — JANGAN pernah di-push
+.env
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Dataset gede (opsional — kalau > 100MB, GitHub bakal nolak push-nya)
+# Uncomment kalau CSV kamu gede banget:
+# *.csv
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Flask session / logs
+*.log
+instance/

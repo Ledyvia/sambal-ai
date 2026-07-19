@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}SAMBAL.AI — Dapurmu, Ditemani AI{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+{% import '_icons.html' as icons %}
+
+<nav class="navbar">
+    <a href="/" class="brand">SAMBAL<span>.AI</span></a>
+    <div class="nav-links">
+        <a href="{{ url_for('landing') }}" class="{{ 'active' if request.path == '/' else '' }}">Beranda</a>
+        <a href="{{ url_for('menu') }}" class="{{ 'active' if request.path == '/menu' else '' }}">Menu</a>
+        {% if is_logged_in %}
+        <a href="{{ url_for('meal_planner') }}" class="{{ 'active' if request.path == '/rencana-menu' else '' }}">Rencana Menu</a>
+        <a href="{{ url_for('favorit') }}" class="{{ 'active' if request.path == '/favorit' else '' }}">Favorit</a>
+        <a href="{{ url_for('riwayat_chat') }}" class="{{ 'active' if request.path == '/riwayat-chat' else '' }}">Riwayat Chat</a>
+        {% endif %}
+        <a href="{{ url_for('blog') }}" class="{{ 'active' if '/blog' in request.path else '' }}">Blog</a>
+        <a href="{{ url_for('about') }}" class="{{ 'active' if request.path == '/tentang' else '' }}">Tentang</a>
+        <a href="{{ url_for('kontak') }}" class="{{ 'active' if request.path == '/kontak' else '' }}">Kontak</a>
+    </div>
+    <div class="nav-auth">
+        {% if is_logged_in %}
+            <span class="mono nav-username">Hai, {{ current_username }}</span>
+            <a href="{{ url_for('logout') }}" class="btn-outline">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="btn-outline">Login</a>
+            <a href="{{ url_for('register') }}" class="btn-cta small">Daftar</a>
+        {% endif %}
+    </div>
+</nav>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="flash-wrap">
+        {% for msg in messages %}
+        <div class="flash-msg">{{ msg }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endwith %}
+
+{% block content %}{% endblock %}
+
+<footer>
+    SAMBAL.AI — Sistem multi-agent rekomendasi resep masakan Indonesia. Dataset: Indonesian Food Recipes.
+</footer>
+
+<!-- Chat widget -->
+<button id="chat-fab" aria-label="Buka chat rekomendasi resep">{{ icons.icon('bowl', 26) }}</button>
+<div id="chat-panel">
+    <div class="chat-header">
+        <span class="title">Tanya Koki AI</span>
+        <div class="chat-header-actions">
+            {% if is_logged_in %}
+            <a href="{{ url_for('riwayat_chat') }}" class="chat-history-link" title="Lihat semua riwayat">{{ icons.icon('history', 18) }}</a>
+            {% endif %}
+            <button id="chat-close" aria-label="Tutup chat">{{ icons.icon('close', 16) }}</button>
+        </div>
+    </div>
+    <div id="chat-messages">
+        <div class="chat-msg bot">Halo! Ceritain bahan yang kamu punya, atau nama masakan yang mau kamu bikin — nanti aku carikan resepnya dari database. 🍲</div>
+    </div>
+    <form id="chat-form">
+        <input id="chat-input" type="text" placeholder="mis. ada telur sama kangkung..." autocomplete="off">
+        <button type="submit">Kirim</button>
+    </form>
+</div>
+
+<script>
+    window.IS_LOGGED_IN = {{ 'true' if is_logged_in else 'false' }};
+    window.LOGIN_URL = "{{ url_for('login') }}";
+</script>
+<script src="{{ url_for('static', filename='js/icons.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

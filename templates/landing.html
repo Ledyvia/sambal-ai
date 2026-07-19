@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% import '_icons.html' as icons %}
+{% block content %}
+
+<section class="hero">
+    <div>
+        <span class="eyebrow">{{ total }} Resep Asli Indonesia</span>
+        <h1>Buka kulkas kamu.<br>Biar <em>SAMBAL.AI</em> yang mikirin menunya.</h1>
+        <p class="lead">Ketik bahan yang kamu punya, atau nama masakan yang lagi kamu bayangin — AI-nya bakal cariin dan pilihin resep paling cocok dari database resep asli Indonesia.</p>
+
+        <div class="hero-demo">
+            <label>Coba sekarang</label>
+            <form id="hero-demo-form" class="hero-demo-row">
+                <input id="hero-demo-input" type="text" placeholder="ada ayam sama kecap, enaknya dimasak apa?" autocomplete="off">
+                <button type="submit" class="btn-cta">Tanya AI</button>
+            </form>
+            {% if not is_logged_in %}
+            <p class="hero-demo-note">Perlu <a href="{{ url_for('login') }}">login</a> dulu buat pakai fitur chat AI.</p>
+            {% endif %}
+        </div>
+
+        <div class="hero-links">
+            {% if is_logged_in %}
+            <a href="{{ url_for('menu') }}" class="btn-cta">Jelajahi Menu {{ icons.icon('arrow-right', 16) }}</a>
+            {% else %}
+            <a href="{{ url_for('register') }}" class="btn-cta">Buat Akun Gratis {{ icons.icon('arrow-right', 16) }}</a>
+            <a href="{{ url_for('login') }}" class="btn-outline">Sudah Punya Akun</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="hero-visual"><span>{{ icons.icon('bowl', 88) }}</span></div>
+</section>
+
+<section class="features">
+    <span class="section-label">Kenapa SAMBAL.AI</span>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <span class="feature-icon">{{ icons.icon('message', 22) }}</span>
+            <h3>Ngobrol Biasa Aja</h3>
+            <p>Nggak perlu format kaku — tinggal ketik kayak lagi cerita ke temen, "ada ayam sama kecap nih enaknya dimasak apa".</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">{{ icons.icon('book', 22) }}</span>
+            <h3>Resep Asli, Bukan Karangan</h3>
+            <p>Semua rekomendasi diambil langsung dari database resep asli Indonesia — bahan dan langkah masaknya valid.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">{{ icons.icon('calendar', 22) }}</span>
+            <h3>Rencana Menu Seminggu</h3>
+            <p>Biar AI susunin menu sarapan-siang-malam buat seminggu, lengkap sama daftar belanja bahan yang masih kurang.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">{{ icons.icon('sparkles', 22) }}</span>
+            <h3>Dikasih Tau Alasannya</h3>
+            <p>Bukan cuma dikasih nama resep — kamu juga tau kenapa resep itu paling cocok buat kamu.</p>
+        </div>
+    </div>
+</section>
+
+{% if not is_logged_in %}
+<section class="locked-teaser">
+    <div class="locked-card">
+        <span class="lock-icon">{{ icons.icon('lock', 26) }}</span>
+        <h2>{{ total }} Resep Menunggu Buat Dijelajahi</h2>
+        <p>Menu lengkap, kategori (ayam, sapi, ikan, udang, tempe, tahu, telur, kambing), rencana menu mingguan, resep favorit, dan riwayat chat AI — semua bisa diakses setelah kamu punya akun. Gratis, cuma butuh 30 detik.</p>
+        <div class="locked-preview">
+            <div class="locked-card-blur"></div>
+            <div class="locked-card-blur"></div>
+            <div class="locked-card-blur"></div>
+        </div>
+        <a href="{{ url_for('register') }}" class="btn-cta">Daftar & Mulai Explore {{ icons.icon('arrow-right', 16) }}</a>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

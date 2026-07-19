@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% import '_icons.html' as icons %}
+{% block title %}Tentang Kami — SAMBAL.AI{% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <span class="eyebrow">Tentang Kami</span>
+    <h1>Kenapa SAMBAL.AI Dibuat</h1>
+    <p class="lead">SAMBAL.AI lahir dari satu pertanyaan sederhana yang sering muncul tiap hari: "ada bahan ini di kulkas, enaknya dimasak apa ya?"</p>
+</section>
+
+<section class="about-section">
+    <div class="about-block">
+        <h2>Misi Kami</h2>
+        <p>Membantu siapa pun — mahasiswa, anak kos, sampai orang tua yang lagi buru-buru — nemuin resep masakan Indonesia yang tepat, cepat, dan sesuai bahan yang mereka punya. Bukan cuma kasih daftar resep acak, tapi rekomendasi yang benar-benar dipikirkan lewat AI.</p>
+    </div>
+
+    <div class="about-block">
+        <h2>Cara Kerja: 3 Agent AI</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <span class="feature-icon">{{ icons.icon('search', 22) }}</span>
+                <h3>Ingredient Analyzer</h3>
+                <p>Baca kalimat kamu apa adanya, ekstrak bahan dan maksud sebenarnya — nggak perlu format kaku.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">{{ icons.icon('book', 22) }}</span>
+                <h3>Recipe Finder</h3>
+                <p>Cari kandidat resep langsung dari database asli, disaring berdasarkan bahan dan kata kunci.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">{{ icons.icon('check', 22) }}</span>
+                <h3>Decision Maker</h3>
+                <p>Pilih 2-3 resep paling relevan dari kandidat, lengkap dengan alasannya.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-block">
+        <h2>Datanya Dari Mana?</h2>
+        <p>Seluruh resep berasal dari dataset Indonesian Food Recipes — lebih dari 14.000 resep asli dari komunitas masak Indonesia, mencakup 8 kategori bahan utama: ayam, sapi, ikan, udang, tempe, tahu, telur, dan kambing. Setiap rekomendasi yang diberikan AI selalu berdasarkan data ini, bukan karangan.</p>
+    </div>
+
+    <div class="about-block">
+        <h2>Dibangun Sebagai Proyek Pembelajaran</h2>
+        <p>SAMBAL.AI dibuat sebagai proyek tugas kuliah yang mengeksplorasi arsitektur multi-agent AI, integrasi LLM (Gemini), dan pengembangan aplikasi web full-stack menggunakan Flask dan MySQL.</p>
+    </div>
+</section>
+
+{% endblock %}

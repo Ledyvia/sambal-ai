@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Blog & Tips Masak — SAMBAL.AI{% endblock %}
+{% import '_icons.html' as icons %}
+{% block content %}
+
+<section class="page-header">
+    <span class="eyebrow">Blog</span>
+    <h1>Tips & Cerita Dapur</h1>
+    <p class="lead">Trik masak, penyimpanan bahan, dan panduan seputar masakan Indonesia.</p>
+</section>
+
+<section class="blog-section">
+    <div class="blog-grid">
+        {% for post in posts %}
+        <a href="/blog/{{ post.slug }}" class="blog-card">
+            <span class="cat-tag">{{ post.category }}</span>
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.excerpt }}</p>
+            <span class="blog-read-more">Baca selengkapnya {{ icons.icon('arrow-right', 14) }}</span>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

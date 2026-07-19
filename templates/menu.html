@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% import '_icons.html' as icons %}
+{% block title %}Menu Resep — SAMBAL.AI{% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <span class="eyebrow">{{ total }} Resep</span>
+    <h1>Menu Resep</h1>
+    <p class="lead">Jelajahi semua resep, filter per kategori, atau cari langsung nama masakan/bahan.</p>
+</section>
+
+<section class="categories">
+    <span class="section-label">Kategori</span>
+    <div class="jar-row" id="jar-row">
+        {% for cat in categories %}
+        <button class="jar" data-category="{{ cat }}">{{ cat }}</button>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="recipe-section">
+    <div style="margin-top: 12px;">
+        <input id="search-input" type="text" placeholder="Cari nama resep atau bahan..."
+               style="width:100%; padding:13px 16px; border-radius:12px; border:1.5px solid var(--border-soft); font-family:'Plus Jakarta Sans',sans-serif; font-size:0.95rem;">
+    </div>
+    <div class="recipe-grid" id="recipe-grid">
+        {% for r in recipes %}
+        <a href="/resep/{{ r.id }}" class="recipe-card">
+            <span class="cat-tag">{{ r.category }}</span>
+            <h3>{{ r.title }}</h3>
+            <div class="meta">
+                <span>{{ r.total_ingredients }} bahan</span>
+                <span>{{ icons.icon('heart-filled', 14) }} {{ r.loves }}</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    <div class="pagination" id="pagination"></div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+    // Kalau datang dari link kategori landing page (?category=xxx), auto-filter
+    const params = new URLSearchParams(window.location.search);
+    const initialCategory = params.get("category");
+    if (initialCategory) {
+        const btn = document.querySelector(`.jar[data-category="${initialCategory}"]`);
+        if (btn) btn.click();
+    }
+</script>
+{% endblock %}

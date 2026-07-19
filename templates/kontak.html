@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Kontak & Bantuan — SAMBAL.AI{% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <span class="eyebrow">Kontak & Bantuan</span>
+    <h1>Ada Pertanyaan?</h1>
+    <p class="lead">Cek FAQ di bawah, atau kirim pesan langsung ke kami.</p>
+</section>
+
+<section class="kontak-section">
+    <div class="faq-block">
+        <span class="section-label">Pertanyaan Umum</span>
+        <div class="faq-list">
+            {% for q, a in faqs %}
+            <details class="faq-item">
+                <summary>{{ q }}</summary>
+                <p>{{ a }}</p>
+            </details>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="auth-card contact-card">
+        <span class="eyebrow">Hubungi Kami</span>
+        <h2>Kirim Pesan</h2>
+        <form method="POST" class="auth-form">
+            <label>Nama</label>
+            <input type="text" name="name" required>
+
+            <label>Email</label>
+            <input type="email" name="email" required>
+
+            <label>Pesan</label>
+            <textarea name="message" rows="4" required></textarea>
+
+            <button type="submit" class="btn-cta full">Kirim Pesan</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

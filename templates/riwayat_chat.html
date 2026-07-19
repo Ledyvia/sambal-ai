@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Riwayat Percakapan — SAMBAL.AI{% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <span class="eyebrow">{{ history|length }} Percakapan</span>
+    <h1>Riwayat Percakapan AI</h1>
+    <p class="lead">Semua pertanyaan yang pernah kamu tanyakan ke Koki AI, beserta jawabannya.</p>
+</section>
+
+<section class="riwayat-section">
+    {% for item in history %}
+    <div class="riwayat-item">
+        <div class="riwayat-meta mono">{{ item.created_at }}</div>
+        <div class="chat-msg user riwayat-bubble">{{ item.message }}</div>
+        <div class="chat-msg bot riwayat-bubble">{{ item.reply | linkify }}</div>
+    </div>
+    {% else %}
+    <p style="color: rgba(59,36,23,0.55);">Belum ada percakapan. Coba tanya sesuatu lewat tombol 🍲 di pojok kanan bawah.</p>
+    {% endfor %}
+</section>
+
+{% endblock %}

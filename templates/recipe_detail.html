@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% import '_icons.html' as icons %}
+{% block title %}{{ recipe.title }} — SAMBAL.AI{% endblock %}
+{% block content %}
+
+<div class="detail-wrap">
+    <a href="{{ url_for('menu') }}" class="back-link">{{ icons.icon('arrow-left', 15) }} Kembali ke menu</a>
+    <div class="detail-title-row">
+        <div>
+            <span class="cat-tag">{{ recipe.category }}</span>
+            <h1>{{ recipe.title }}</h1>
+            <div class="meta-row">{{ recipe.total_ingredients }} bahan · {{ recipe.total_steps }} langkah · {{ icons.icon('heart-filled', 14) }} {{ recipe.loves }}</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+            <a href="{{ url_for('export_recipe_pdf', recipe_id=recipe.id) }}" class="btn-outline">{{ icons.icon('download', 15) }} Download PDF</a>
+            {% if is_logged_in %}
+            <button id="fav-btn" class="fav-btn {{ 'active' if is_favorited else '' }}" data-recipe-id="{{ recipe.id }}">
+                {% if is_favorited %}{{ icons.icon('heart-filled', 17) }} Favorit{% else %}{{ icons.icon('heart', 17) }} Simpan{% endif %}
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if tutorial %}
+    <div class="detail-block">
+        <h2>{{ icons.icon('play', 18) }} Tutorial Video</h2>
+        <a href="{{ tutorial.url }}" target="_blank" class="video-card">
+            <img src="{{ tutorial.thumbnail }}" alt="{{ tutorial.title }}">
+            <div class="video-card-info">
+                <strong>{{ tutorial.title }}</strong>
+                <span>{{ tutorial.channel }}</span>
+            </div>
+        </a>
+    </div>
+    {% endif %}
+
+    {% if timeline %}
+    <div class="detail-block">
+        <h2>{{ icons.icon('clock', 18) }} Cooking Timeline</h2>
+        <div class="timeline">
+            {% for t in timeline %}
+            <div class="timeline-item">
+                <div class="timeline-time">{{ t.waktu_kumulatif }} mnt</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-text">{{ t.step }} <span class="timeline-duration">(~{{ t.durasi_menit }} mnt)</span></div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="detail-block">
+        <h2>Bahan</h2>
+        <div class="content">{{ recipe.ingredients }}</div>
+    </div>
+
+    <div class="detail-block">
+        <h2>Langkah</h2>
+        <div class="content">{{ recipe.steps }}</div>
+    </div>
+
+    {% if recipe.url %}
+    <div class="detail-block">
+        <a href="{{ recipe.url }}" target="_blank" class="back-link">Lihat sumber asli {{ icons.icon('arrow-right', 15) }}</a>
+    </div>
+    {% endif %}
+
+    {% if similar_recipes %}
+    <div class="detail-block">
+        <h2>Resep Serupa</h2>
+        <div class="recipe-grid">
+            {% for r in similar_recipes %}
+            <a href="/resep/{{ r.id }}" class="recipe-card">
+                <span class="cat-tag">{{ r.category }}</span>
+                <h3>{{ r.title }}</h3>
+                <div class="meta">
+                    <span>{{ r.total_ingredients }} bahan</span>
+                    <span>{{ icons.icon('heart-filled', 14) }} {{ r.loves }}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const favBtn = document.getElementById("fav-btn");
+if (favBtn) {
+    favBtn.addEventListener("click", async () => {
+        const recipeId = favBtn.dataset.recipeId;
+        const res = await fetch(`/api/favorit/${recipeId}`, { method: "POST" });
+        const data = await res.json();
+        if (data.favorited) {
+            favBtn.innerHTML = icon("heart-filled", 17) + " Favorit";
+            favBtn.classList.add("active");
+        } else {
+            favBtn.innerHTML = icon("heart", 17) + " Simpan";
+            favBtn.classList.remove("active");
+        }
+    });
+}
+</script>
+{% endblock %}
