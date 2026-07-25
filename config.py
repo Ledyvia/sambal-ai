@@ -10,11 +10,11 @@ MODEL_NAME = "gemini-3.5-flash"
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-ganti-ini")
 
 DB_CONFIG = {
-    "host": os.environ.get("DB_HOST", "MYSQLHOST"),
-    "port": int(os.environ.get("DB_PORT", 3306)),
-    "user": os.environ.get("DB_USER", "root"),
-    "password": os.environ.get("DB_PASSWORD", ""),
-    "database": os.environ.get("DB_NAME", "sambal_ai"),
+    "host": os.environ.get("MYSQLHOST"),
+    "user": os.environ.get("MYSQLUSER"),
+    "password": os.environ.get("MYSQLPASSWORD"),
+    "database": os.environ.get("MYSQLDATABASE"),
+    "port": int(os.environ.get("MYSQLPORT", 3306)),
 }
 
 STOPWORDS_ID = {
