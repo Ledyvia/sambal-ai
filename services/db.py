@@ -1,18 +1,20 @@
-"""Koneksi database (MySQL via XAMPP) dan cache DataFrame resep."""
 import mysql.connector
 import pandas as pd
 from sqlalchemy import create_engine
 import os
 
-# ✅ TAMBAHAN (INI YANG PENTING)
+# DEBUG Railway ENV
+print("MYSQLHOST =", os.getenv("MYSQLHOST"))
+print("MYSQLPORT =", os.getenv("MYSQLPORT"))
+print("MYSQLUSER =", os.getenv("MYSQLUSER"))
+print("MYSQLDATABASE =", os.getenv("MYSQLDATABASE"))
+
 port = int(os.getenv("MYSQLPORT") or 3306)
 
 _engine = create_engine(
     f"mysql+mysqlconnector://{os.getenv('MYSQLUSER')}:{os.getenv('MYSQLPASSWORD')}"
     f"@{os.getenv('MYSQLHOST')}:{port}/{os.getenv('MYSQLDATABASE')}"
 )
-
-_recipes_cache = None
 
 
 def get_connection():
@@ -21,7 +23,7 @@ def get_connection():
         user=os.getenv("MYSQLUSER"),
         password=os.getenv("MYSQLPASSWORD"),
         database=os.getenv("MYSQLDATABASE"),
-        port=int(os.getenv("MYSQLPORT")),
+        port=int(os.getenv("MYSQLPORT") or 3306),
     )
 
 
