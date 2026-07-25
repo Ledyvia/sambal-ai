@@ -4,9 +4,12 @@ import pandas as pd
 from sqlalchemy import create_engine
 import os
 
+# ✅ TAMBAHAN (INI YANG PENTING)
+port = int(os.getenv("MYSQLPORT") or 3306)
+
 _engine = create_engine(
     f"mysql+mysqlconnector://{os.getenv('MYSQLUSER')}:{os.getenv('MYSQLPASSWORD')}"
-    f"@{os.getenv('MYSQLHOST')}:{os.getenv('MYSQLPORT')}/{os.getenv('MYSQLDATABASE')}"
+    f"@{os.getenv('MYSQLHOST')}:{port}/{os.getenv('MYSQLDATABASE')}"
 )
 
 _recipes_cache = None
