@@ -3,6 +3,8 @@ import pandas as pd
 from sqlalchemy import create_engine
 import os
 
+_recipes_cache = None
+
 # DEBUG Railway ENV
 print("MYSQLHOST =", os.getenv("MYSQLHOST"))
 print("MYSQLPORT =", os.getenv("MYSQLPORT"))
